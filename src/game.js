@@ -2,28 +2,7 @@ export default class Game {
 	score = 0;
 	lines = 0;
 	level = 0;
-	play_field = [
-		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-	];
+	play_field = this.createPlayField(20, 10);
 
 	// Target property
 	active_target = {
@@ -119,6 +98,45 @@ export default class Game {
 			for (let x = 0; x < blocks[y].length; x++) {
 				if (blocks[y][x]) this.play_field[targetY + y][targetX + x] = blocks[y][x];
 			};
+		};
+	};
+
+	createPlayField(yLength, xLenght) {
+		const playfield = [];
+
+		for (let y = 0; y < yLength; y++) {
+			playfield[y] = [];
+			
+			for (let x = 0; x < xLenght; x++) {
+				playfield[y][x] = 0;
+			};
+		};
+
+		return playfield;
+	};
+
+	getState() {
+		const playfield = this.createPlayField(20, 10);
+		const {x: targetX, y: targetY, blocks} = this.active_target;
+
+		for (let y = 0; y < this.play_field.length; y++) {
+			playfield[y] = [];
+			
+			for (let x = 0; x < this.play_field[y].length; x++) {
+				playfield[y][x] = this.play_field[y][x];
+			};
+		};
+
+		for (let y = 0; y < blocks.length; y++) {
+			for (let x = 0; x < blocks[y].length; x++) {
+				if (blocks[y][x]) {
+					playfield[targetY + y][targetX + x] = blocks[y][x];
+				};
+			};
+		};
+
+		return {
+			playfield
 		};
 	};
 	
