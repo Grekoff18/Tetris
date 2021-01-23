@@ -40,8 +40,9 @@ export default class Game {
 		if (this.hasCollision()) {
 			this.active_target.y -= 1;
 			this.lockTarget();
-			const clearedLines = this.clearLines();
-			this.updateScore(clearedLines);
+			this.clearLines();
+			// const clearedLines = 
+			this.updateScore(this.clearLines());
 			this.updateTargets();
 		};
 	};
@@ -87,9 +88,7 @@ export default class Game {
 					blocks[y][x] &&
 					((this.play_field[targetY + y] === undefined || this.play_field[targetY + y][targetX + x] === undefined) ||
 					this.play_field[targetY + y][targetX + x])
- 				) {
-					return true;
-				};
+ 				) return true;
 			};
 		};
 
@@ -101,7 +100,9 @@ export default class Game {
  
 		for (let y = 0; y < blocks.length; y++) {
 			for (let x = 0; x < blocks[y].length; x++) {
-				if (blocks[y][x]) this.play_field[targetY + y][targetX + x] = blocks[y][x];
+				if (blocks[y][x]) {
+					this.play_field[targetY + y][targetX + x] = blocks[y][x];
+				};
 			};
 		};
 	};
@@ -131,7 +132,7 @@ export default class Game {
 					[0, 0, 0, 0],
 					[1, 1, 1, 1],
 					[0, 0, 0, 0],
-					[0, 0, 0, 0]
+					[0, 0, 0, 0],
 				];
 				break;
 
@@ -156,7 +157,7 @@ export default class Game {
 					[0, 0, 0, 0],
 					[0, 4, 4, 0],
 					[0, 4, 4, 0],
-					[0, 0, 0, 0]
+					[0, 0, 0, 0],
 				];				
 				break;
 			
@@ -214,7 +215,11 @@ export default class Game {
 		};
 
 		return {
-			playfield
+			level: this.level,
+			score: this.score,
+			lines: this.lines,
+			next_target: this.next_target,
+			playfield,
 		};
 	};
 
@@ -222,12 +227,11 @@ export default class Game {
 		this.active_target = this.next_target;
 		this.next_target = this.createTarget();
 	};
-
+//!!!!!!!!!!!!!!!!!
 	updateScore(clearedLines) {
 		if (clearedLines > 0) {
 			this.score += Game.points[clearedLines] * (this.level + 1);
 			this.lines += clearedLines;
-			console.log(this.score, this.lines);
 		}
 	}
 
